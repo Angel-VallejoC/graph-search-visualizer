@@ -12,7 +12,7 @@ public class Cell extends JButton {
     public static final String STATE_PROHIBITED = "prohibited";
     public static final String STATE_START_POINT = "start";
     public static final String STATE_END_POINT = "end";
-    private static Color prohibitedCellColor = new Color(13, 71, 161);
+    private static Color prohibitedColor = new Color(13, 71, 161);
     private static Color defaultColor = Color.WHITE;
     private static Color startColor = new Color(46, 125, 50);
     private static Color endColor = new Color(198, 40, 40);
@@ -48,7 +48,7 @@ public class Cell extends JButton {
             toggleEndState();
 
         state = state.equals(STATE_PROHIBITED) ? STATE_DEFAULT : STATE_PROHIBITED;
-        setBackground(state.equals(STATE_PROHIBITED) ? prohibitedCellColor : defaultColor);
+        setBackground(state.equals(STATE_PROHIBITED) ? prohibitedColor : defaultColor);
     }
 
     public void toggleStartState() {
