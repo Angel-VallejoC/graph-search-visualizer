@@ -1,18 +1,20 @@
-package labyrinthSolver;
+package graphSearchVisualizer;
+
+import graphSearchVisualizer.listeners.GridClickListener;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class Labyrinth extends JPanel implements LabyrinthClickListener {
+public class Grid extends JPanel implements GridClickListener {
 
     private int width;
     private int height;
     private int cellSize;
-    private Wall[][] walls;
-    private Wall start;
-    private Wall end;
+    private Cell[][] cells;
+    private Cell start;
+    private Cell end;
 
-    public Labyrinth(int width, int height, int cellSize) {
+    public Grid(int width, int height, int cellSize) {
         super();
         this.width = width;
         this.height = height;
@@ -32,35 +34,35 @@ public class Labyrinth extends JPanel implements LabyrinthClickListener {
     }
 
     private void initializeCells() {
-        walls = new Wall[width][height];
+        cells = new Cell[width][height];
         for (int row = 0; row < width; row++) {
             for (int column = 0; column < height; column++) {
-                walls[row][column] = new Wall(cellSize, row, column, this);
-                this.add(walls[row][column]);
+                cells[row][column] = new Cell(cellSize, row, column, this);
+                this.add(cells[row][column]);
             }
         }
     }
 
     @Override
-    public void leftClick(Wall wall) {
-        wall.toggleWallState();
+    public void leftClick(Cell cell) {
+        cell.toggleWallState();
     }
 
     @Override
-    public void rightClick(Wall wall) {
+    public void rightClick(Cell cell) {
         if (start == null) {
-            wall.toggleStartState();
-            start = wall;
+            cell.toggleStartState();
+            start = cell;
         } else {
-            if (start == wall) {
+            if (start == cell) {
                 start = null;
-                wall.toggleStartState();
-            } else if (end == wall) {
+                cell.toggleStartState();
+            } else if (end == cell) {
                 end = null;
-                wall.toggleEndState();
+                cell.toggleEndState();
             } else if (end == null) {
-                end = wall;
-                wall.toggleEndState();
+                end = cell;
+                cell.toggleEndState();
             }
         }
     }

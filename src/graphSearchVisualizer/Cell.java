@@ -1,9 +1,12 @@
-package labyrinthSolver;
+package graphSearchVisualizer;
+
+import graphSearchVisualizer.listeners.CellClickListener;
+import graphSearchVisualizer.listeners.GridClickListener;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class Wall extends JButton {
+public class Cell extends JButton {
 
     public static final String STATE_ACTIVE = "active";
     public static final String STATE_INACTIVE = "inactive";
@@ -17,9 +20,9 @@ public class Wall extends JButton {
     private int row;
     private int column;
     private String state;
-    private LabyrinthClickListener clickListener;
+    private GridClickListener clickListener;
 
-    public Wall(int cellSize, int row, int column, LabyrinthClickListener clickListener) {
+    public Cell(int cellSize, int row, int column, GridClickListener clickListener) {
         super();
 
         this.state = STATE_INACTIVE;
@@ -35,7 +38,7 @@ public class Wall extends JButton {
         this.setFocusPainted(false);
         this.setBackground(Color.WHITE);
 
-        this.addMouseListener(new WallClickListener(clickListener));
+        this.addMouseListener(new CellClickListener(clickListener));
     }
 
     public void toggleWallState() {
