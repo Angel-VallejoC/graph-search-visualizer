@@ -8,12 +8,12 @@ import java.awt.*;
 
 public class Cell extends JButton {
 
-    public static final String STATE_ACTIVE = "active";
-    public static final String STATE_INACTIVE = "inactive";
+    public static final String STATE_DEFAULT = "default";
+    public static final String STATE_PROHIBITED = "prohibited";
     public static final String STATE_START_POINT = "start";
     public static final String STATE_END_POINT = "end";
-    private static Color activeColor = new Color(13, 71, 161);
-    private static Color inactiveColor = Color.WHITE;
+    private static Color prohibitedCellColor = new Color(13, 71, 161);
+    private static Color defaultColor = Color.WHITE;
     private static Color startColor = new Color(46, 125, 50);
     private static Color endColor = new Color(198, 40, 40);
 
@@ -25,7 +25,7 @@ public class Cell extends JButton {
     public Cell(int cellSize, int row, int column, GridClickListener clickListener) {
         super();
 
-        this.state = STATE_INACTIVE;
+        this.state = STATE_DEFAULT;
         this.row = row;
         this.column = column;
         this.clickListener = clickListener;
@@ -41,34 +41,34 @@ public class Cell extends JButton {
         this.addMouseListener(new CellClickListener(clickListener));
     }
 
-    public void toggleWallState() {
+    public void toggleProhibitedState() {
         if (isStartPoint())
             toggleStartState();
         if (isEndPoint())
             toggleEndState();
 
-        state = state.equals(STATE_ACTIVE) ? STATE_INACTIVE : STATE_ACTIVE;
-        setBackground(state.equals(STATE_ACTIVE) ? activeColor : inactiveColor);
+        state = state.equals(STATE_PROHIBITED) ? STATE_DEFAULT : STATE_PROHIBITED;
+        setBackground(state.equals(STATE_PROHIBITED) ? prohibitedCellColor : defaultColor);
     }
 
     public void toggleStartState() {
-        if (isWallActive())
-            toggleWallState();
+        if (isProhibitedCell())
+            toggleProhibitedState();
 
-        state = state.equals(STATE_START_POINT) ? STATE_INACTIVE : STATE_START_POINT;
-        setBackground(state.equals(STATE_START_POINT) ? startColor : inactiveColor);
+        state = state.equals(STATE_START_POINT) ? STATE_DEFAULT : STATE_START_POINT;
+        setBackground(state.equals(STATE_START_POINT) ? startColor : defaultColor);
     }
 
     public void toggleEndState() {
-        if (isWallActive())
-            toggleWallState();
+        if (isProhibitedCell())
+            toggleProhibitedState();
 
-        state = state.equals(STATE_END_POINT) ? STATE_INACTIVE : STATE_END_POINT;
-        setBackground(state.equals(STATE_END_POINT) ? endColor : inactiveColor);
+        state = state.equals(STATE_END_POINT) ? STATE_DEFAULT : STATE_END_POINT;
+        setBackground(state.equals(STATE_END_POINT) ? endColor : defaultColor);
     }
 
-    public boolean isWallActive() {
-        return state.equals(STATE_ACTIVE);
+    public boolean isProhibitedCell() {
+        return state.equals(STATE_PROHIBITED);
     }
 
     public boolean isStartPoint() {

@@ -45,7 +45,7 @@ public class Grid extends JPanel implements GridClickListener {
 
     @Override
     public void leftClick(Cell cell) {
-        cell.toggleWallState();
+        cell.toggleProhibitedState();
     }
 
     @Override
