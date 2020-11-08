@@ -43,27 +43,45 @@ public class Grid extends JPanel implements GridClickListener {
         }
     }
 
+    public void search(){
+        if (start == null || end == null){
+            JOptionPane.showMessageDialog(this, "You must select start and end cells to start searching",
+                    "Select start and end cells", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Search search = new Search(cells);
+                System.out.println( search.dfs(start, end));
+            }
+        }).start();
+    }
+
     @Override
     public void leftClick(Cell cell) {
-        cell.toggleProhibitedState();
+        if ( ! (cell.isStartPoint() || cell.isEndPoint()))
+            cell.setProhibitedState();
     }
 
     @Override
     public void rightClick(Cell cell) {
-        if (start == null) {
-            cell.toggleStartState();
+        if (start == null && end == null) {
+            cell.setStartState();
             start = cell;
-        } else {
-            if (start == cell) {
-                start = null;
-                cell.toggleStartState();
-            } else if (end == cell) {
-                end = null;
-                cell.toggleEndState();
-            } else if (end == null) {
-                end = cell;
-                cell.toggleEndState();
-            }
+        }
+        else if (start == cell && end == null ){
+            cell.setDefaultState();
+            start = null;
+        }
+        else if (start != null && end == null) {
+            cell.setEndState();
+            end = cell;
+        }
+        else if (start != null && end == cell){
+            cell.setDefaultState();
+            end = null;
         }
     }
 }
