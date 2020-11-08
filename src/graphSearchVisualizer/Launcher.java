@@ -1,21 +1,25 @@
 package graphSearchVisualizer;
 
+import graphSearchVisualizer.listeners.SearchListener;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Launcher extends JFrame {
+public class Launcher extends JFrame implements SearchListener, ActionListener {
 
     public static final String TITLE = "GRAPH SEARCH VISUALIZER";
     public static final int MIN_WIDTH = 500;
     public static final int MIN_HEIGHT = 500;
     private Grid grid;
+    private JButton searchButton;
+    private JButton clearButton;
+    private JButton resetButton;
+    private JComboBox<String> searchMethodCB;
 
     public Launcher() {
         configWindow();
-
-        grid = new Grid(10, 10, 30);
         addComponents();
     }
 
@@ -29,40 +33,64 @@ public class Launcher extends JFrame {
     }
 
     private void addComponents() {
+        grid = new Grid(10, 10, 30, this);
         add(grid);
-        JComboBox searchMethod = new JComboBox();
-        searchMethod.addItem("DFS");
-        searchMethod.addItem("BFS");
-        add(searchMethod);
 
-        JButton search = new JButton("Search");
-        search.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                grid.search();
-            }
-        });
-        add(search);
+        searchMethodCB = new JComboBox<String>();
+        searchMethodCB.addItem(Search.BFS);
+        searchMethodCB.addItem(Search.DFS);
+        add(searchMethodCB);
 
-        JButton clearButton = new JButton("Clear");
-        clearButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                grid.clear();
-            }
-        });
+        searchButton = new JButton("Search");
+        searchButton.addActionListener(this);
+        add(searchButton);
+
+        clearButton = new JButton("Clear");
+        clearButton.addActionListener(this);
+        clearButton.setEnabled(false);
         add(clearButton);
 
-        JButton resetButton = new JButton("Reset");
-        resetButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                grid.reset();
-            }
-        });
+        resetButton = new JButton("Reset");
+        resetButton.addActionListener(this);
+        resetButton.setEnabled(false);
         add(resetButton);
+    }
 
+    // Buttons callback
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        JButton source = (JButton) e.getSource();
+        if (source == searchButton){
+            if (grid.isStartAndEndSelected()){
+                source.setEnabled(false);
+                clearButton.setEnabled(false);
+                resetButton.setEnabled(false);
+                grid.search((String) searchMethodCB.getSelectedItem());
+            }
+            else {
+                JOptionPane.showMessageDialog(this, "You must select start and end cells to start searching",
+                        "Select start and end cells", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        else if (source == clearButton){
+            grid.clear();
+            searchButton.setEnabled(true);
+        }
+        else if (source == resetButton){
+            grid.reset();
+            searchButton.setEnabled(true);
+        }
+    }
 
+    // Grid Search callbacks
+    @Override
+    public void started() {
+
+    }
+    @Override
+    public void finished(String method, boolean result) {
+        clearButton.setEnabled(true);
+        resetButton.setEnabled(true);
     }
 
     public static void main(String[] args) {
