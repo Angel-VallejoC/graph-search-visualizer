@@ -107,8 +107,12 @@ public class Grid extends JPanel implements GridClickListener {
 
     @Override
     public void leftClick(Cell cell) {
-        if (!(cell.isStartPoint() || cell.isEndPoint()))
-            cell.setState(Cell.STATE_PROHIBITED);
+        if (!(cell.isStartPoint() || cell.isEndPoint())) {
+            if (cell.isDefaultState())
+                cell.setState(Cell.STATE_PROHIBITED);
+            else
+                cell.setState(Cell.STATE_DEFAULT);
+        }
     }
 
     @Override

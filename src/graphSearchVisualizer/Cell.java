@@ -51,6 +51,10 @@ public class Cell extends JButton {
         return column;
     }
 
+    public boolean isDefaultState(){
+        return state.equals(STATE_DEFAULT);
+    }
+
     public boolean isEndPoint() {
         return state.equals(STATE_END_POINT);
     }
