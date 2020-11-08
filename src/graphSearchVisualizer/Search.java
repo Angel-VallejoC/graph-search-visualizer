@@ -1,14 +1,98 @@
 package graphSearchVisualizer;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Search {
 
-    private Cell[][] cells;
+    public static final String BFS = "Breath First Search (BFS)";
+    public static final String DFS = "Depth First Search (DFS)";
+
     private static boolean found = false;
+    private Cell[][] cells;
+    private HashMap<Cell, Cell> parent;
 
     public Search(Cell[][] cells){
         this.cells = cells;
+    }
+
+    public boolean bfs(Cell start, Cell end){
+        parent = new HashMap<>();
+        HashSet<Cell> visited = new HashSet<Cell>();
+        Queue<Cell> queue = new LinkedList<>();
+
+        visited.add(start);
+        queue.add(start);
+
+        while (!queue.isEmpty()){
+
+            for (int i = 0; i < queue.size(); i++) {
+                Cell head = queue.poll();
+
+                if (head == end) {
+                    return true;
+                }
+
+                visited.add(head);
+                int row = head.getRow();
+                int column = head.getColumn();
+                head.setState(Cell.STATE_SEARCHING);
+
+                // go left
+                if (isValidCell(row, column - 1) && !visited.contains(cells[row][column - 1]) &&
+                        !cells[row][column - 1].isProhibitedCell()) {
+                    queue.add(cells[row][column - 1]);
+                    visited.add(cells[row][column - 1]);
+                    parent.put(cells[row][column - 1], head);
+                }
+
+                // go right
+                if (isValidCell(row, column + 1) && !visited.contains(cells[row][column + 1]) &&
+                        !cells[row][column + 1].isProhibitedCell()) {
+                    queue.add(cells[row][column + 1]);
+                    visited.add(cells[row][column + 1]);
+                    parent.put(cells[row][column + 1], head);
+                }
+
+                // go up
+                if (isValidCell(row - 1, column) && !visited.contains(cells[row - 1][column]) &&
+                        !cells[row - 1][column].isProhibitedCell()) {
+                    queue.add(cells[row - 1][column]);
+                    visited.add(cells[row - 1][column]);
+                    parent.put(cells[row - 1][column], head);
+                }
+
+                // go down
+                if (isValidCell(row + 1, column) && !visited.contains(cells[row + 1][column]) &&
+                        !cells[row + 1][column].isProhibitedCell()) {
+                    queue.add(cells[row + 1][column]);
+                    visited.add(cells[row + 1][column]);
+                    parent.put(cells[row + 1][column], head);
+                }
+            }
+
+            try {
+                Thread.sleep(250);
+            } catch (Exception exception){
+                System.out.println(exception.getMessage());
+            }
+        }
+
+        return false;
+    }
+
+    public void tracePath(Cell start, Cell end){
+        if (parent == null)
+            return;
+
+        Cell current = end;
+
+        while (current != start){
+            current = parent.get(current);
+            current.setState(Cell.STATE_SEARCHING);
+        }
     }
 
     public boolean dfs(Cell start, Cell end) {
