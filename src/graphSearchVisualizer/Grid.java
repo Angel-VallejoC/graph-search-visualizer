@@ -27,7 +27,7 @@ public class Grid extends JPanel implements GridClickListener {
     }
 
     private void configWindow() {
-        this.setPreferredSize(new Dimension(width*cellSize, height*cellSize));
+        this.setPreferredSize(new Dimension(width * cellSize, height * cellSize));
         this.setLayout(new GridLayout(height, width));
         this.setFocusable(true);
         this.setVisible(true);
@@ -43,8 +43,8 @@ public class Grid extends JPanel implements GridClickListener {
         }
     }
 
-    public void search(){
-        if (start == null || end == null){
+    public void search() {
+        if (start == null || end == null) {
             JOptionPane.showMessageDialog(this, "You must select start and end cells to start searching",
                     "Select start and end cells", JOptionPane.ERROR_MESSAGE);
             return;
@@ -54,33 +54,33 @@ public class Grid extends JPanel implements GridClickListener {
             @Override
             public void run() {
                 Search search = new Search(cells);
-                System.out.println( search.dfs(start, end));
+                System.out.println(search.dfs(start, end));
             }
         }).start();
     }
 
     @Override
     public void leftClick(Cell cell) {
-        if ( ! (cell.isStartPoint() || cell.isEndPoint()))
-            cell.setProhibitedState();
+        if (!(cell.isStartPoint() || cell.isEndPoint()))
+            cell.setState(Cell.STATE_PROHIBITED);
     }
 
     @Override
     public void rightClick(Cell cell) {
         if (start == null && end == null) {
-            cell.setStartState();
+            cell.setState(Cell.STATE_START_POINT);
             start = cell;
         }
-        else if (start == cell && end == null ){
-            cell.setDefaultState();
+        else if (start == cell && end == null) {
+            cell.setState(Cell.STATE_DEFAULT);
             start = null;
         }
         else if (start != null && end == null) {
-            cell.setEndState();
+            cell.setState(Cell.STATE_END_POINT);
             end = cell;
         }
-        else if (start != null && end == cell){
-            cell.setDefaultState();
+        else if (start != null && end == cell) {
+            cell.setState(Cell.STATE_DEFAULT);
             end = null;
         }
     }

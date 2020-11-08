@@ -16,7 +16,7 @@ public class Cell extends JButton {
     private static Color prohibitedColor = new Color(13, 71, 161);
     private static Color defaultColor = Color.WHITE;
     private static Color startColor = new Color(46, 125, 50);
-    private static Color searchingColor = new Color(46, 125, 50);
+    private static Color searchingColor = new Color(255, 160, 0);
     private static Color endColor = new Color(198, 40, 40);
 
     private int row;
@@ -63,29 +63,17 @@ public class Cell extends JButton {
         return state.equals(STATE_START_POINT);
     }
 
-    public void setDefaultState(){
-        state = STATE_DEFAULT;
-        setBackground(defaultColor);
+    public void setState(String state){
+        switch (state){
+            case STATE_DEFAULT:     setBackground(defaultColor); break;
+            case STATE_START_POINT: setBackground(startColor);  break;
+            case STATE_END_POINT:   setBackground(endColor);    break;
+            case STATE_PROHIBITED:  setBackground(prohibitedColor); break;
+            case STATE_SEARCHING:   setBackground(searchingColor);  break;
+            default:
+                setBackground(defaultColor);
+                state = STATE_DEFAULT;
+        }
+        this.state = state;
     }
-
-    public void setEndState() {
-        state = state.equals(STATE_END_POINT) ? STATE_DEFAULT : STATE_END_POINT;
-        setBackground(state.equals(STATE_END_POINT) ? endColor : defaultColor);
-    }
-
-    public void setProhibitedState() {
-        state = state.equals(STATE_PROHIBITED) ? STATE_DEFAULT : STATE_PROHIBITED;
-        setBackground(state.equals(STATE_PROHIBITED) ? prohibitedColor : defaultColor);
-    }
-
-    public void setSearchState(){
-        state = state.equals(STATE_SEARCHING) ? STATE_DEFAULT : STATE_SEARCHING;
-        setBackground(state.equals(STATE_SEARCHING) ? searchingColor : defaultColor);
-    }
-
-    public void setStartState() {
-        state = state.equals(STATE_START_POINT) ? STATE_DEFAULT : STATE_START_POINT;
-        setBackground(state.equals(STATE_START_POINT) ? startColor : defaultColor);
-    }
-
 }
