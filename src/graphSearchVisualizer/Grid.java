@@ -1,6 +1,7 @@
 package graphSearchVisualizer;
 
 import graphSearchVisualizer.listeners.GridClickListener;
+import graphSearchVisualizer.listeners.SearchListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,14 +14,16 @@ public class Grid extends JPanel implements GridClickListener {
     private Cell[][] cells;
     private Cell start;
     private Cell end;
+    private SearchListener searchListener;
 
-    public Grid(int width, int height, int cellSize) {
+    public Grid(int width, int height, int cellSize, SearchListener searchListener) {
         super();
         this.width = width;
         this.height = height;
         this.cellSize = cellSize;
         this.start = null;
         this.end = null;
+        this.searchListener = searchListener;
 
         configWindow();
         initializeCells();
@@ -66,18 +69,38 @@ public class Grid extends JPanel implements GridClickListener {
         }
     }
 
-    public void search() {
-        if (start == null || end == null) {
-            JOptionPane.showMessageDialog(this, "You must select start and end cells to start searching",
-                    "Select start and end cells", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+    public boolean isStartAndEndSelected(){
+        return start != null && end != null;
+    }
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Search search = new Search(cells);
-                System.out.println(search.dfs(start, end));
+    public void search(String method) {
+        if (! isStartAndEndSelected())
+            return;
+
+        new Thread(() -> {
+            Search search = new Search(cells);
+
+            searchListener.started();
+
+            boolean result;
+            switch (method){
+                case Search.BFS:
+                    result = search.bfs(start, end);
+                    if (result){
+                        try {
+                            Thread.sleep(250);
+                        } catch (Exception exception){
+                            System.out.println(exception.getMessage());
+                        }
+                        clear();
+                        search.tracePath(start, end);
+                    }
+                    searchListener.finished(Search.BFS, result);
+                    break;
+                case Search.DFS:
+                default:
+                    result = search.dfs(start, end);
+                    searchListener.finished(Search.DFS, result);
             }
         }).start();
     }
