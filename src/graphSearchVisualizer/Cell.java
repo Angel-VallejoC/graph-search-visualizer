@@ -12,9 +12,11 @@ public class Cell extends JButton {
     public static final String STATE_PROHIBITED = "prohibited";
     public static final String STATE_START_POINT = "start";
     public static final String STATE_END_POINT = "end";
+    public static final String STATE_SEARCHING = "searching";
     private static Color prohibitedColor = new Color(13, 71, 161);
     private static Color defaultColor = Color.WHITE;
     private static Color startColor = new Color(46, 125, 50);
+    private static Color searchingColor = new Color(46, 125, 50);
     private static Color endColor = new Color(198, 40, 40);
 
     private int row;
@@ -41,30 +43,16 @@ public class Cell extends JButton {
         this.addMouseListener(new CellClickListener(clickListener));
     }
 
-    public void toggleProhibitedState() {
-        if (isStartPoint())
-            toggleStartState();
-        if (isEndPoint())
-            toggleEndState();
-
-        state = state.equals(STATE_PROHIBITED) ? STATE_DEFAULT : STATE_PROHIBITED;
-        setBackground(state.equals(STATE_PROHIBITED) ? prohibitedColor : defaultColor);
+    public int getRow() {
+        return row;
     }
 
-    public void toggleStartState() {
-        if (isProhibitedCell())
-            toggleProhibitedState();
-
-        state = state.equals(STATE_START_POINT) ? STATE_DEFAULT : STATE_START_POINT;
-        setBackground(state.equals(STATE_START_POINT) ? startColor : defaultColor);
+    public int getColumn() {
+        return column;
     }
 
-    public void toggleEndState() {
-        if (isProhibitedCell())
-            toggleProhibitedState();
-
-        state = state.equals(STATE_END_POINT) ? STATE_DEFAULT : STATE_END_POINT;
-        setBackground(state.equals(STATE_END_POINT) ? endColor : defaultColor);
+    public boolean isEndPoint() {
+        return state.equals(STATE_END_POINT);
     }
 
     public boolean isProhibitedCell() {
@@ -75,16 +63,29 @@ public class Cell extends JButton {
         return state.equals(STATE_START_POINT);
     }
 
-    public boolean isEndPoint() {
-        return state.equals(STATE_END_POINT);
+    public void setDefaultState(){
+        state = STATE_DEFAULT;
+        setBackground(defaultColor);
     }
 
-    public int getRow() {
-        return row;
+    public void setEndState() {
+        state = state.equals(STATE_END_POINT) ? STATE_DEFAULT : STATE_END_POINT;
+        setBackground(state.equals(STATE_END_POINT) ? endColor : defaultColor);
     }
 
-    public int getColumn() {
-        return column;
+    public void setProhibitedState() {
+        state = state.equals(STATE_PROHIBITED) ? STATE_DEFAULT : STATE_PROHIBITED;
+        setBackground(state.equals(STATE_PROHIBITED) ? prohibitedColor : defaultColor);
+    }
+
+    public void setSearchState(){
+        state = state.equals(STATE_SEARCHING) ? STATE_DEFAULT : STATE_SEARCHING;
+        setBackground(state.equals(STATE_SEARCHING) ? searchingColor : defaultColor);
+    }
+
+    public void setStartState() {
+        state = state.equals(STATE_START_POINT) ? STATE_DEFAULT : STATE_START_POINT;
+        setBackground(state.equals(STATE_START_POINT) ? startColor : defaultColor);
     }
 
 }
