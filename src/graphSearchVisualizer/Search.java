@@ -21,15 +21,12 @@ public class Search {
     private void dfs(HashSet<Cell> visited, Cell current, Cell end){
 
         if (current == end) {
-            System.out.println("found");
             found = true;
             return;
         }
 
-        System.out.println("[" + current.getRow() + "," + current.getColumn() + "]");
-
         visited.add(current);
-        current.setSearchState();
+        current.setState(Cell.STATE_SEARCHING);
 
         try {
             Thread.sleep(250);
@@ -62,7 +59,7 @@ public class Search {
             dfs(visited, cells[current.getRow()+1][current.getColumn()], end);
 
         if (!found)
-            current.setDefaultState();
+            current.setState(Cell.STATE_DEFAULT);
     }
 
     private boolean isValidCell(int row, int column) {
