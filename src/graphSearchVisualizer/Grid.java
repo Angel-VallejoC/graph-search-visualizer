@@ -33,12 +33,35 @@ public class Grid extends JPanel implements GridClickListener {
         this.setVisible(true);
     }
 
+    public void clear(){
+        for (int row = 0; row < width; row++) {
+            for (int column = 0; column < height; column++) {
+                if (cells[row][column] == start)
+                    cells[row][column].setState(Cell.STATE_START_POINT);
+                else if (cells[row][column].isEndPoint())
+                    cells[row][column].setState(Cell.STATE_END_POINT);
+                else if (!cells[row][column].isProhibitedCell())
+                    cells[row][column].setState(Cell.STATE_DEFAULT);
+            }
+        }
+    }
+
     private void initializeCells() {
         cells = new Cell[width][height];
         for (int row = 0; row < width; row++) {
             for (int column = 0; column < height; column++) {
                 cells[row][column] = new Cell(cellSize, row, column, this);
                 this.add(cells[row][column]);
+            }
+        }
+    }
+
+    public void reset(){
+        for (int row = 0; row < width; row++) {
+            for (int column = 0; column < height; column++) {
+                cells[row][column].setState(Cell.STATE_DEFAULT);
+                start = null;
+                end = null;
             }
         }
     }

@@ -29,11 +29,11 @@ public class Launcher extends JFrame {
     }
 
     private void addComponents() {
-        this.add(grid);
-        JComboBox prueba = new JComboBox();
-        prueba.addItem("DFS");
-        prueba.addItem("BFS");
-        this.add(prueba);
+        add(grid);
+        JComboBox searchMethod = new JComboBox();
+        searchMethod.addItem("DFS");
+        searchMethod.addItem("BFS");
+        add(searchMethod);
 
         JButton search = new JButton("Search");
         search.addActionListener(new ActionListener() {
@@ -42,8 +42,27 @@ public class Launcher extends JFrame {
                 grid.search();
             }
         });
+        add(search);
 
-        this.add(search);
+        JButton clearButton = new JButton("Clear");
+        clearButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                grid.clear();
+            }
+        });
+        add(clearButton);
+
+        JButton resetButton = new JButton("Reset");
+        resetButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                grid.reset();
+            }
+        });
+        add(resetButton);
+
+
     }
 
     public static void main(String[] args) {
