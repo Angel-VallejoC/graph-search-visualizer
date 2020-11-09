@@ -27,50 +27,47 @@ public class Search {
         queue.add(start);
 
         while (!queue.isEmpty()){
+            Cell head = queue.poll();
 
-            for (int i = 0; i < queue.size(); i++) {
-                Cell head = queue.poll();
+            if (head == end) {
+                return true;
+            }
 
-                if (head == end) {
-                    return true;
-                }
+            visited.add(head);
+            int row = head.getRow();
+            int column = head.getColumn();
+            head.setState(Cell.STATE_SEARCHING);
 
-                visited.add(head);
-                int row = head.getRow();
-                int column = head.getColumn();
-                head.setState(Cell.STATE_SEARCHING);
+            // go left
+            if (isValidCell(row, column - 1) && !visited.contains(cells[row][column - 1]) &&
+                    !cells[row][column - 1].isProhibitedCell()) {
+                queue.add(cells[row][column - 1]);
+                visited.add(cells[row][column - 1]);
+                parent.put(cells[row][column - 1], head);
+            }
 
-                // go left
-                if (isValidCell(row, column - 1) && !visited.contains(cells[row][column - 1]) &&
-                        !cells[row][column - 1].isProhibitedCell()) {
-                    queue.add(cells[row][column - 1]);
-                    visited.add(cells[row][column - 1]);
-                    parent.put(cells[row][column - 1], head);
-                }
+            // go right
+            if (isValidCell(row, column + 1) && !visited.contains(cells[row][column + 1]) &&
+                    !cells[row][column + 1].isProhibitedCell()) {
+                queue.add(cells[row][column + 1]);
+                visited.add(cells[row][column + 1]);
+                parent.put(cells[row][column + 1], head);
+            }
 
-                // go right
-                if (isValidCell(row, column + 1) && !visited.contains(cells[row][column + 1]) &&
-                        !cells[row][column + 1].isProhibitedCell()) {
-                    queue.add(cells[row][column + 1]);
-                    visited.add(cells[row][column + 1]);
-                    parent.put(cells[row][column + 1], head);
-                }
+            // go up
+            if (isValidCell(row - 1, column) && !visited.contains(cells[row - 1][column]) &&
+                    !cells[row - 1][column].isProhibitedCell()) {
+                queue.add(cells[row - 1][column]);
+                visited.add(cells[row - 1][column]);
+                parent.put(cells[row - 1][column], head);
+            }
 
-                // go up
-                if (isValidCell(row - 1, column) && !visited.contains(cells[row - 1][column]) &&
-                        !cells[row - 1][column].isProhibitedCell()) {
-                    queue.add(cells[row - 1][column]);
-                    visited.add(cells[row - 1][column]);
-                    parent.put(cells[row - 1][column], head);
-                }
-
-                // go down
-                if (isValidCell(row + 1, column) && !visited.contains(cells[row + 1][column]) &&
-                        !cells[row + 1][column].isProhibitedCell()) {
-                    queue.add(cells[row + 1][column]);
-                    visited.add(cells[row + 1][column]);
-                    parent.put(cells[row + 1][column], head);
-                }
+            // go down
+            if (isValidCell(row + 1, column) && !visited.contains(cells[row + 1][column]) &&
+                    !cells[row + 1][column].isProhibitedCell()) {
+                queue.add(cells[row + 1][column]);
+                visited.add(cells[row + 1][column]);
+                parent.put(cells[row + 1][column], head);
             }
 
             try {
